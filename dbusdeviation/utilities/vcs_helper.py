@@ -34,7 +34,6 @@ Requirements:
 import argparse
 from contextlib import contextmanager
 import os
-import pipes
 import shlex
 import shutil
 import subprocess
@@ -66,17 +65,8 @@ def _git_command(args, command):
 
 
 def _format_command(args):
-    """Local wrapper for pipes.quote() with support for Python 2.7."""
-    try:
-        # pylint: disable=no-member
-        return ' '.join(shlex.quote(a) for a in args)
-    except AttributeError:
-        try:
-            # pylint: disable=no-member
-            return ' '.join(pipes.quote(a) for a in args)
-        except AttributeError:
-            # Give up
-            return ' '.join(args)
+    """Format a command line for display, quoting arguments as needed."""
+    return ' '.join(shlex.quote(a) for a in args)
 
 
 def _get_contents_of_file(args, tag, api_xml_file):
